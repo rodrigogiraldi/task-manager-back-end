@@ -3,6 +3,8 @@ package com.rodrigo.services;
 import com.rodrigo.entities.User;
 import com.rodrigo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -14,16 +16,18 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public String createUser(User user) {
+    public ResponseEntity<String> createUser(User user) {
 
         List<User> usersFound = userRepository.findByEmail(user.getEmail());
 
         if (usersFound.size() == 0) {
             User userCreated = userRepository.save(user);
 
-            return generateToken(userCreated.getId());
+            String token = generateToken(userCreated.getId());
+
+            return new ResponseEntity<String>(token, HttpStatus.CREATED);
         } else {
-            return "Email already in use";
+            return new ResponseEntity<String>("Email already in use", HttpStatus.FORBIDDEN);
         }
     }
 
