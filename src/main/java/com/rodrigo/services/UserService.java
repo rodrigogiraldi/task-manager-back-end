@@ -34,14 +34,18 @@ public class UserService {
     /*
     Dummy token generator
      */
-    private String generateToken(Long id) {
+    protected String generateToken(Long id) {
         String token = Base64.getEncoder().encodeToString(id.toString().getBytes());
 
         return token;
     }
 
-    private Long decodeToken(String token) {
+    protected Long decodeToken(String token) {
         String id = new String(Base64.getDecoder().decode(token));
         return Long.valueOf(id);
+    }
+
+    public void withUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }
