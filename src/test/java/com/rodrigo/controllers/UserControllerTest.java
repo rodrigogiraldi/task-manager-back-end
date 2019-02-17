@@ -1,6 +1,7 @@
 package com.rodrigo.controllers;
 
 import com.rodrigo.entities.User;
+import com.rodrigo.utils.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -22,13 +23,17 @@ public class UserControllerTest {
     public void testCreate() {
         User user = generateUserEntity(1, "test@email.com", "123");
 
-        when(userControllerMock.create(user)).thenReturn(new ResponseEntity<>("aSd1", HttpStatus.CREATED));
+        when(userControllerMock.create(user)).thenReturn(new ResponseEntity<>(new Response("aSd1"), HttpStatus.CREATED));
 
-        ResponseEntity<String> responseEntityWithToken = userControllerMock.create(user);
+        ResponseEntity<Response<String>> responseEntityWithToken = userControllerMock.create(user);
 
         assertNotNull(responseEntityWithToken);
         assertNotNull(responseEntityWithToken.getBody());
-        assertTrue(responseEntityWithToken.getBody().length() > 0);
+
+        Response<String> response = responseEntityWithToken.getBody();
+
+        assertNotNull(response);
+        assertTrue(response.getData().length() > 0);
     }
 
     private User generateUserEntity(long id, String email, String password) {

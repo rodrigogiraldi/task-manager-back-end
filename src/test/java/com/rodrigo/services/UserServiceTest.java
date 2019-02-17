@@ -2,6 +2,7 @@ package com.rodrigo.services;
 
 import com.rodrigo.entities.User;
 import com.rodrigo.repositories.UserRepository;
+import com.rodrigo.utils.Response;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -40,11 +41,15 @@ public class UserServiceTest {
 
         userService.withUserRepository(userRepositoryMock);
 
-        ResponseEntity<String> response = userService.createUser(user);
+        ResponseEntity<Response<String>> responseEntity = userService.createUser(user);
+
+        assertNotNull(responseEntity);
+
+        Response<String> response = responseEntity.getBody();
 
         assertNotNull(response);
-        assertNotNull(response.getBody());
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getData());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     }
 
     @Test
@@ -59,11 +64,15 @@ public class UserServiceTest {
 
         userService.withUserRepository(userRepositoryMock);
 
-        ResponseEntity<String> response = userService.createUser(user);
+        ResponseEntity<Response<String>> responseEntity = userService.createUser(user);
+
+        assertNotNull(responseEntity);
+
+        Response<String> response = responseEntity.getBody();
 
         assertNotNull(response);
-        assertNotNull(response.getBody());
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertNotNull(response.getData());
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
 
     @Test

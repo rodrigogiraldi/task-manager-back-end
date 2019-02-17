@@ -2,6 +2,7 @@ package com.rodrigo.controllers;
 
 import com.rodrigo.entities.User;
 import com.rodrigo.services.UserService;
+import com.rodrigo.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,10 @@ https://spring.io/blog/2015/06/08/cors-support-in-spring-framework
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<String> create(@RequestBody User user) {
+    public ResponseEntity<Response<String>> create(@RequestBody User user) {
         return userService.createUser(user);
     }
 }
