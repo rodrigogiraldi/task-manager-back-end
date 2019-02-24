@@ -20,7 +20,7 @@ public class UserControllerTest {
     private UserController userControllerMock;
 
     @Test
-    public void testCreate() {
+    public void createTest() {
         User user = generateUserEntity(1, "test@email.com", "123");
 
         when(userControllerMock.create(user)).thenReturn(new ResponseEntity<>(new Response("aSd1"), HttpStatus.CREATED));
@@ -43,5 +43,22 @@ public class UserControllerTest {
         user.setPassword(password);
 
         return user;
+    }
+
+    @Test
+    public void logInTest() {
+        User user = generateUserEntity(1, "test@email.com", "123");
+
+        when(userControllerMock.logIn(user)).thenReturn(new ResponseEntity<>(new Response("aSd1"), HttpStatus.OK));
+
+        ResponseEntity<Response<String>> responseEntityWithToken = userControllerMock.logIn(user);
+
+        assertNotNull(responseEntityWithToken);
+        assertNotNull(responseEntityWithToken.getBody());
+
+        Response<String> response = responseEntityWithToken.getBody();
+
+        assertNotNull(response);
+        assertTrue(response.getData().length() > 0);
     }
 }

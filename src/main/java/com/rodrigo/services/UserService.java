@@ -53,4 +53,20 @@ public class UserService {
     public void withUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    public ResponseEntity<Response<String>> logIn(User user) {
+
+        List<User> userFound = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
+
+        Response<String> response = new Response<>("");
+
+        if (userFound.size() == 0) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            String token = generateToken(userFound.get(0).getId());
+            response.setData(token);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+    }
 }

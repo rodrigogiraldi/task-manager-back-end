@@ -22,4 +22,9 @@ public class UserController {
     public ResponseEntity<Response<String>> create(@RequestBody User user) {
         return userService.createUser(user);
     }
+
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    public ResponseEntity<Response<String>> logIn(@RequestBody User user) {
+        return userService.logIn(user);
+    }
 }
