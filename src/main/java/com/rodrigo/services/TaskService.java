@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaskService {
 
@@ -33,5 +35,20 @@ public class TaskService {
         response.setData(taskDb);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<Response<List<Task>>> getAll(String authorizationToken) {
+
+        long userId = userService.decodeToken(authorizationToken);
+
+        User user = new User();
+        user.setId(userId);
+
+        List<Task> tasks = taskRepository.findByUser(user);
+
+        Response<List<Task>> response = new Response<>();
+        response.setData(tasks);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

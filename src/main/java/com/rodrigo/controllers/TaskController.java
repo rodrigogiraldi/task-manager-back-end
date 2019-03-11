@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 public class TaskController {
@@ -17,5 +19,10 @@ public class TaskController {
     @RequestMapping(value = "/task", method = RequestMethod.POST)
     public ResponseEntity<Response<Task>> create(@RequestBody Task task, @RequestHeader(value = "Authorization") String authorizationToken) {
         return taskService.createTask(task, authorizationToken);
+    }
+
+    @RequestMapping(value = "/task", method = RequestMethod.GET)
+    public ResponseEntity<Response<List<Task>>> getAll(@RequestHeader(value = "Authorization") String authorizationToken) {
+        return taskService.getAll(authorizationToken);
     }
 }
