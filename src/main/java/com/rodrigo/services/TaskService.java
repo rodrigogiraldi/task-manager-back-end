@@ -14,41 +14,55 @@ import java.util.List;
 @Service
 public class TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+	@Autowired
+	private TaskRepository taskRepository;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    public ResponseEntity<Response<Task>> createTask(Task task, String authorizationToken) {
+	public ResponseEntity<Response<Task>> createTask(Task task, String authorizationToken) {
 
-        long userId = userService.decodeToken(authorizationToken);
+		long userId = userService.decodeToken(authorizationToken);
 
-        User user = new User();
-        user.setId(userId);
+		User user = new User();
+		user.setId(userId);
 
-        task.setUser(user);
+		task.setUser(user);
 
-        Task taskDb = taskRepository.save(task);
+		Task taskDb = taskRepository.save(task);
 
-        Response<Task> response = new Response<>();
-        response.setData(taskDb);
+		Response<Task> response = new Response<>();
+		response.setData(taskDb);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
 
-    public ResponseEntity<Response<List<Task>>> getAll(String authorizationToken) {
+	public ResponseEntity<Response<List<Task>>> getAll(String authorizationToken) {
 
-        long userId = userService.decodeToken(authorizationToken);
+		long userId = userService.decodeToken(authorizationToken);
 
-        User user = new User();
-        user.setId(userId);
+		User user = new User();
+		user.setId(userId);
 
-        List<Task> tasks = taskRepository.findByUser(user);
+		List<Task> tasks = taskRepository.findByUser(user);
 
-        Response<List<Task>> response = new Response<>();
-        response.setData(tasks);
+		Response<List<Task>> response = new Response<>();
+		response.setData(tasks);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	public ResponseEntity<Response<Boolean>> hasAny(String authorizationToken) {
+		long userId = userService.decodeToken(authorizationToken);
+
+		User user = new User();
+		user.setId(userId);
+
+		List<Task> tasks = taskRepository.findFirstByUser(user);
+
+		Response<Boolean> response = new Response<>();
+		response.setData(tasks.size() > 0);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }

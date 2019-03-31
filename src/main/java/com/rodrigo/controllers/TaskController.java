@@ -13,16 +13,23 @@ import java.util.List;
 @RestController
 public class TaskController {
 
-    @Autowired
-    TaskService taskService;
+	@Autowired
+	TaskService taskService;
 
-    @RequestMapping(value = "/task", method = RequestMethod.POST)
-    public ResponseEntity<Response<Task>> create(@RequestBody Task task, @RequestHeader(value = "Authorization") String authorizationToken) {
-        return taskService.createTask(task, authorizationToken);
-    }
+	@RequestMapping(value = "/task", method = RequestMethod.POST)
+	public ResponseEntity<Response<Task>> create(@RequestBody Task task,
+			@RequestHeader(value = "Authorization") String authorizationToken) {
+		return taskService.createTask(task, authorizationToken);
+	}
 
-    @RequestMapping(value = "/task", method = RequestMethod.GET)
-    public ResponseEntity<Response<List<Task>>> getAll(@RequestHeader(value = "Authorization") String authorizationToken) {
-        return taskService.getAll(authorizationToken);
-    }
+	@RequestMapping(value = "/task", method = RequestMethod.GET)
+	public ResponseEntity<Response<List<Task>>> getAll(
+			@RequestHeader(value = "Authorization") String authorizationToken) {
+		return taskService.getAll(authorizationToken);
+	}
+
+	@RequestMapping(value = "/task/has-any", method = RequestMethod.GET)
+	public ResponseEntity<Response<Boolean>> hasAny(@RequestHeader(value = "Authorization") String authorizationToken) {
+		return taskService.hasAny(authorizationToken);
+	}
 }
